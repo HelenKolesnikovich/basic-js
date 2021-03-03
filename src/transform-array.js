@@ -14,7 +14,7 @@ module.exports = function transform(arr) {
         {
             if(copyArray[i] === '--discard-next')
             {
-                if((copyArray.length - 1) === i)
+                if((copyArray.length - 1) == i)
                 {
                     copyArray.splice(i, 1);
                 }
@@ -26,7 +26,7 @@ module.exports = function transform(arr) {
             }
             else if(copyArray[i] === '--discard-prev')
             {
-                if(copyArray[i] === 0)
+                if(i == 0)
                 {
                     copyArray.splice(0, 1);
                 }
@@ -38,7 +38,7 @@ module.exports = function transform(arr) {
             }
             else if(copyArray[i] === '--double-next')
             {
-                if((copyArray.length - 1) === i)
+                if((copyArray.length - 1) == i)
                 {
                     copyArray.splice(i, 1);
                 }
@@ -49,9 +49,9 @@ module.exports = function transform(arr) {
                     i++;
                 }
             }
-            else if(copyArray[i] === '--double-prev')
+            else if(copyArray[i]  === '--double-prev')
             {
-                if(i === 0)
+                if(i == 0)
                 {
                     copyArray.splice(0, 1);
                 }
