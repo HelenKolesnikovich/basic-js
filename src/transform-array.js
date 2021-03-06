@@ -32,7 +32,7 @@ module.exports = function transform(arr) {
                 }
                 else
                 {
-                    copyArray.splice(i - 1, 2);
+                    copyArray.splice(i-1, 2);
                     i -= 2;
                 }
             }
@@ -46,7 +46,6 @@ module.exports = function transform(arr) {
                 {
                     let additionElement = copyArray[i + 1];
                     copyArray.splice(i, 1, additionElement);
-                    i++;
                 }
             }
             else if(copyArray[i]  === '--double-prev')
