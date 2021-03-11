@@ -1,37 +1,37 @@
 const CustomError = require("../extensions/custom-error");
 
 const chainMaker = {
-  chainArray: [],
+  chainArray : [],
   getLength(chain) {
-    this.chainArray.length;    
-    return this;
+      return this.chainArray.length;    
   },
 
   addLink(value) {
-    value = typeof value === 'string' ? value : String(value);
-    this.chainArray.push(value);
-    return this;
+      value = typeof value === 'string' ? value : String(value);
+      this.chainArray.push(value);
+  return this;
   },
 
   removeLink(position) {
-    if(typeof position !== 'number' || (position < 1 && position > chainArray.length - 1) || !Number.isInteger(position))
+
+      if(typeof position !== 'number' || (position < 1 && position > chainArray.length - 1) || !Number.isInteger(position))
       {
-        return 'Error';
+          return 'Error';
       }
-    
-    this.chainArray.splice(position - 1, 1);
-    return this;
+
+      this.chainArray.splice(position - 1, 1);
+  return this;
   },
 
   reverseChain() {
-    this.chainArray = this.chainArray.reverse();
-    return this;
+      this.chainArray = this.chainArray.reverse();
+  return this;
   },
 
   finishChain() {
-    let str = this.chainMaker.join(' )~~( ');
-    let resultStr = '( '.concat(str, ' )');
-    return resultStr;
+      let str = this.chainArray.join(' )~~( ');
+      let resultStr = '( '.concat(str, ' )');
+      return resultStr;
   }
 };
 
