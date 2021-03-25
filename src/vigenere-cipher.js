@@ -54,13 +54,17 @@ class VigenereCipheringMachine {
     let additionKeyChars = [];
     if(messageChars.length > keyChars.length)
     {
-			for(let i = keyChars.length, j = 0; i < messageChars.length; i++, j++)
+			for(let i = keyChars.length, j = 0; i < messageChars.length; i++)
 			{
 				additionKeyChars.push(keyChars[j]);
 				if(j === keyChars.length - 1) 
 				{
 					j = 0;
 				} 
+        else
+        {
+          j++
+        } 
 			}
     }
     return keyChars.concat(additionKeyChars);
