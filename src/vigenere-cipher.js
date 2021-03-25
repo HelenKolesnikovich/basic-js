@@ -1,14 +1,14 @@
 const CustomError = require("../extensions/custom-error");
 
-class VigenereCipheringMachine {
+class VigenereCipheringMachine {  
 	constructor(machineType) {
 		if(machineType || machineType == undefined)
 		{
-			return new DirectVigenereCipheringMachine();
+			this.isDirect = true;
 		}
 		else if(!machineType)
 		{
-			return new ReverseVigenereCipheringMachine();
+			this.isDirect = false;
 		}
 	}
 	encrypt(messageString, keyString) {
@@ -23,21 +23,22 @@ class VigenereCipheringMachine {
     const difKeyCodeChars = this.findDifferantForCodeChars(equalKeyCodeChars);
     const encryptCodeChars = this.getEncryptChars(messageCodeChars, difKeyCodeChars);
     const encryptString = this.getString(encryptCodeChars);
+
     return encryptString.toUpperCase();
 	}    
 	decrypt(messageString, keyString) {
-		if(!encryptedString && !keyString)
+		if(!messageString && !keyString)
 		{
 			throw new Exception('Parameter missing!');
 		}
 		const keyCodeChars = this.createCodeChars(keyString.toLowerCase());
 		const messageCodeChars = this.createCodeChars(messageString.toLowerCase());
-
 		const equalKeyCodeChars = this.createEqualStrings(messageCodeChars, keyCodeChars);
 		const difKeyCodeChars = this.findDifferantForCodeChars(equalKeyCodeChars);
 		const decryptCodeChars = this.getDecryptChars(messageCodeChars, difKeyCodeChars);
 		const decryptString = this.getString(decryptCodeChars);
-		return decryptString.toUpperCase();
+
+    return decryptString.toUpperCase();
 	}
 
 	createCodeChars(string) {
@@ -81,40 +82,54 @@ class VigenereCipheringMachine {
 
     for(let i = 0, j=0; i < messageCodeChars.length; i++, j++)
     {
-			if(messageCodeChars[i] >= minCodeChar && messageCodeChars[i] <= maxCodeChar)
-			{
-				let encryptCodeChar = messageCodeChars[i] + difKeyCharCode[j];
-				encryptCodeChar = encryptCodeChar <= maxCodeChar ? encryptCodeChar : minCodeChar + (encryptCodeChar - maxCodeChar - 1);
-				encryptCodeChars.push(encryptCodeChar);
-			}
-			else
-			{
-				encryptCodeChars.push(messageCodeChars[i]);
-				j--;
-			}
+      if(messageCodeChars[i] >= minCodeChar && messageCodeChars[i] <= maxCodeChar)
+      {
+        let encryptCodeChar = messageCodeChars[i] + difKeyCharCode[j];
+        encryptCodeChar = encryptCodeChar <= maxCodeChar ? encryptCodeChar : minCodeChar + (encryptCodeChar - maxCodeChar - 1);
+        encryptCodeChars.push(encryptCodeChar);
+      }
+      else
+      {
+        encryptCodeChars.push(messageCodeChars[i]);
+        j--;
+      }
     }
-    return encryptCodeChars;
+    if(this.isDirect) 
+    {
+      return encryptCodeChars;
+    }
+    else
+    {
+      return encryptCodeChars.reverse();
+    }    
   }
-	getDecryptChars(messageCodeChars, difKeyCodeChars) {
+  getDecryptChars(messageCodeChars, difKeyCodeChars) {
     const minCodeChar = 'a'.charCodeAt();
     const maxCodeChar = 'z'.charCodeAt();
     let decryptCodeChars = [];
 
     for(let i = 0, j = 0; i < messageCodeChars.length; i++, j++)
     {
-			if(messageCodeChars[i] >= minCodeChar && messageCodeChars[i] <= maxCodeChar)
-			{
-				let decryptCodeChar = messageCodeChars[i] - difKeyCodeChars[j];
-				decryptCodeChar = decryptCodeChar >= minCodeChar ? decryptCodeChar : maxCodeChar - (difKeyCodeChars[j] - (messageCodeChars[i] - minCodeChar) - 1);
-				decryptCodeChars.push(decryptCodeChar);
-			}
-			else
-			{
-				decryptCodeChars.push(messageCodeChars[i]);
-				j--;
-			}        
+      if(messageCodeChars[i] >= minCodeChar && messageCodeChars[i] <= maxCodeChar)
+      {
+        let decryptCodeChar = messageCodeChars[i] - difKeyCodeChars[j];
+        decryptCodeChar = decryptCodeChar >= minCodeChar ? decryptCodeChar : maxCodeChar - (difKeyCodeChars[j] - (messageCodeChars[i] - minCodeChar) - 1);
+        decryptCodeChars.push(decryptCodeChar);
+      }
+      else
+      {
+        decryptCodeChars.push(messageCodeChars[i]);
+        j--;
+      }        
     }
-    return decryptCodeChars;
+    if(this.isDirect)
+    {
+      return decryptCodeChars;
+    }
+    else
+    {
+      return decryptCodeChars.reverse();
+    }        
   }
 	getString(codeChars) {
 		let string = '';
