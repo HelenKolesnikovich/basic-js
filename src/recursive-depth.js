@@ -1,54 +1,37 @@
 const CustomError = require("../extensions/custom-error");
 
-module.exports = class DepthCalculator {
+module.exports = class DepthCalculator {  
   calculateDepth(arr) {
-    if(!Array.isArray(arr)) {
+    if(!Array.isArray(arr))
+    {
       return 'Error!';
     }
-
-    var subArraysLenghts = [];
-	  if(Array.isArray(arr)){
-		  if (arr.length>0) {
-			  arr.forEach(function(item) {
-          var itemDepth=calculateDepth(item);
-				  subArraysLenghts.push(1 + itemDepth);
-				});
-		  } else {
-			  subArraysLenghts.push(1);
-		  }
-	  } else {
-		subArraysLenghts.push(0);
-	  }			
-	
-	  return Math.max(...subArraysLenghts);
-  }
-};
-
-
-/*function calculateDepth(arr) {
-  if(!Array.isArray(arr)) {
-    return 'Error!';
-  }
-
-  let depth = 1;
-  arr.forEach(function(item) {
-      let depthCounter = findArrayDepth(item, []);
-      depth < (depthCounter + 2) ? depth = (depthCounter + 2) : depth;
-  });
-  return depth;
-
-  function findArrayDepth(array, depthItem) {
-    array.map(function(item) {
+    
+    let depth;
+    let innerDepthValues = [];
+    arr.forEach(function(item) {                //cycle for initial array
+      depth = 1;
       if(Array.isArray(item))
       {
-        depthItem.push(1);
-        if(item.length > 1)
-        {
-            item = item.flat(depthItem.length);
-            console.log(item);
-        }
-        return findArrayDepth(item, depthItem);
+        innerDepthValues.push(++depth);
+        getSimpleArray(item);
       }
     });
-    return depthItem.length;
-  }*/
+
+    function getSimpleArray(arr) {
+      for(let i = 0; i < arr.length; i++)
+      {
+        if(Array.isArray(arr[i]))
+        {
+          innerDepthValues.push((innerDepthValues[innerDepthValues.length-1]) + 1);
+          getSimpleArray(arr[i]);
+        }
+      }
+    }
+    for(let i = 0; i < innerDepthValues.length; i++)
+    {
+      depth = innerDepthValues[i] > depth ? innerDepthValues[i] : depth;
+    }
+    return depth;
+  }
+}
